@@ -1,0 +1,18 @@
+{
+  "files.autoSave": "afterDelay",
+  "csharp.format.enable": false,
+  "editor.fontSize": 16,
+  "terminal.integrated.fontSize": 14,
+  "emmet.includeLanguages": {
+      "javascript": "javascriptreact"
+  },
+  "emmet.syntaxProfiles": {
+      "javascript": "jsx"
+  },
+  "editor.formatOnSave": true,
+  "git.autofetch": true,
+  "[markdown]": {
+      "editor.wordWrap": "off",
+      "editor.quickSuggestions": false
+  }
+}
