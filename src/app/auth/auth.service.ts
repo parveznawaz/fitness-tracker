@@ -42,7 +42,8 @@ export class AuthService implements OnInit {
   }
 
   isAuth() {
-    return !(this.user === null || this.user === undefined);
+    //return !(this.user === null || this.user === undefined);
+    return this.user!==null;
   }
 
   private authSuccessfully(){
