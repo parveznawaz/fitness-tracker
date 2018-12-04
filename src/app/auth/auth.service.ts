@@ -4,13 +4,14 @@ import { AuthData } from "./auth-data.model";
 import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { TrainingService } from '../training/training.service';
 
 @Injectable()
 export class AuthService implements OnInit {
   authChange = new Subject<boolean>();
   private isAuthenticated: boolean = false;
 
-  constructor(private router: Router, private afAuth: AngularFireAuth){}
+  constructor(private router: Router, private afAuth: AngularFireAuth, private traininigService: TrainingService){}
 
   ngOnInit(): void {}
 
@@ -19,10 +20,9 @@ export class AuthService implements OnInit {
       .createUserWithEmailAndPassword(authData.email,authData.password)
       .then(result=>{
         this.authSuccessfully();
-        console.log(result)
       })
       .catch(error=>{
-        console.log(error);
+        //console.log(error);
       });
   }
 
@@ -31,14 +31,12 @@ export class AuthService implements OnInit {
       .signInWithEmailAndPassword(authData.email,authData.password)
       .then(result=>{
         this.authSuccessfully();
-        console.log(result)
-      })
-      .catch(error=>{
-        console.log(error);
-      });    
+      },error=>{});    
   }
 
   logout() {
+    this.traininigService.cancelSubscriptions();
+    this.afAuth.auth.signOut();
     this.isAuthenticated = true;
     this.authChange.next(false);
     this.router.navigate(['/login']);
