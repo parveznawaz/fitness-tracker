@@ -15,40 +15,37 @@ export class AuthService implements OnInit {
 
   ngOnInit(): void {}
 
+  initAuthListener() {
+    this.afAuth.authState.subscribe(user=>{
+      if(user){
+        this.isAuthenticated = true;
+        this.authChange.next(true);
+        this.router.navigate(['/training']);
+      }else{
+        this.traininigService.cancelSubscriptions();    
+        this.isAuthenticated = true;
+        this.authChange.next(false);
+        this.router.navigate(['/login']);
+      }
+    })
+  }
+
   registerUser(authData: AuthData) {
     this.afAuth.auth
-      .createUserWithEmailAndPassword(authData.email,authData.password)
-      .then(result=>{
-        this.authSuccessfully();
-      })
-      .catch(error=>{
-        //console.log(error);
-      });
+      .createUserWithEmailAndPassword(authData.email,authData.password);
   }
 
   login(authData: AuthData) {
     this.afAuth.auth
-      .signInWithEmailAndPassword(authData.email,authData.password)
-      .then(result=>{
-        this.authSuccessfully();
-      },error=>{});    
+      .signInWithEmailAndPassword(authData.email,authData.password);
   }
 
   logout() {
-    this.traininigService.cancelSubscriptions();
-    this.afAuth.auth.signOut();
-    this.isAuthenticated = true;
-    this.authChange.next(false);
-    this.router.navigate(['/login']);
+    this.afAuth.auth.signOut();    
   }
 
   isAuth() {
     return this.isAuthenticated;
   }
 
-  private authSuccessfully(){
-    this.isAuthenticated = true;
-    this.authChange.next(true);
-    this.router.navigate(['/training']);
-  }
 }
