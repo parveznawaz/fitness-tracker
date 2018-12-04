@@ -8,10 +8,10 @@ import "rxjs/Rx";
 export class TrainingService {
   exerciseChanged = new Subject<Exercise>();
   exercisesChanged = new Subject<Exercise[]>();
+  finishedExercisesChanged = new Subject<Exercise[]>();
   private availableExercises: Exercise[] = [];
 
   private runningExercise: Exercise;
-  private exercises: Exercise[] = [];
 
   constructor(private db: AngularFirestore) {}
 
@@ -68,8 +68,10 @@ export class TrainingService {
     this.runningExercise = null;
     this.exerciseChanged.next(null);
   }
-  getCompletedOrCancelledExercises(): Exercise[] {
-    return this.exercises.slice();
+  fetchCompletedOrCancelledExercises(): Exercise[] {
+    this.db.collection("finishedExercises").valueChanges().subscribe((exercises: Exercise[])=>{
+      this.finishedExercisesChanged.next(exercises);
+    });
   }
 
   private addDataToDatabase(exercise: Exercise) {
